@@ -29,5 +29,15 @@ public interface IRepositorioReservas
 
     Task<IReadOnlyList<int>> FranjasOcupadasAsync(int espacioId, DateOnly fecha, CancellationToken ct);
 
+    /// <summary>
+    /// Reservas activas de un usuario en un espacio y una fecha. Se usa para
+    /// calcular el bloque consecutivo del límite de cuatro horas.
+    /// </summary>
+    Task<IReadOnlyList<Reserva>> ListarActivasDeUsuarioAsync(
+        int usuarioId,
+        int espacioId,
+        DateOnly fecha,
+        CancellationToken ct);
+
     void Agregar(Reserva reserva);
 }

@@ -37,9 +37,12 @@ public sealed class ReglasDeReservaTests
     }
 
     [Fact]
-    public void El_horario_completo_es_valido()
+    public void Los_extremos_del_horario_son_validos()
     {
-        ReglasDeReserva.Validar(Dia(7), Dia(22), Ahora);
+        // Desde la regla de las cuatro horas, el día completo ya no es una
+        // solicitud válida: se comprueban los extremos por separado.
+        ReglasDeReserva.Validar(Dia(7), Dia(11), Ahora);
+        ReglasDeReserva.Validar(Dia(18), Dia(22), Ahora);
     }
 
     [Fact]
@@ -110,5 +113,79 @@ public sealed class ReglasDeReservaTests
         Assert.True(EstadoReserva.Aprobada.EsActiva());
         Assert.False(EstadoReserva.Rechazada.EsActiva());
         Assert.False(EstadoReserva.Cancelada.EsActiva());
+    }
+
+    [Fact]
+    public void Una_reserva_de_cuatro_horas_es_valida()
+    {
+        ReglasDeReserva.Validar(Dia(8), Dia(12), Ahora);
+    }
+
+    [Fact]
+    public void Una_reserva_de_mas_de_cuatro_horas_es_rechazada()
+    {
+        ReglaNegocioException error = Assert.Throws<ReglaNegocioException>(
+            () => ReglasDeReserva.Validar(Dia(8), Dia(12, 30), Ahora));
+
+        Assert.Contains("4 horas", error.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Dos_reservas_contiguas_que_suman_cuatro_horas_son_validas()
+    {
+        ReglasDeReserva.ValidarLimiteConsecutivo(
+            new[] { (Dia(8), Dia(10)) },
+            Dia(10),
+            Dia(12));
+    }
+
+    [Fact]
+    public void Un_bloque_de_cinco_horas_es_rechazado()
+    {
+        ReglaNegocioException error = Assert.Throws<ReglaNegocioException>(
+            () => ReglasDeReserva.ValidarLimiteConsecutivo(
+                new[] { (Dia(8), Dia(10)), (Dia(10), Dia(12)) },
+                Dia(12),
+                Dia(13)));
+
+        Assert.Contains("4 horas", error.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Un_hueco_corta_la_cadena()
+    {
+        ReglasDeReserva.ValidarLimiteConsecutivo(
+            new[] { (Dia(8), Dia(10)) },
+            Dia(10, 30),
+            Dia(12, 30));
+    }
+
+    [Fact]
+    public void La_cadena_se_calcula_aunque_las_reservas_lleguen_desordenadas()
+    {
+        Assert.Throws<ReglaNegocioException>(
+            () => ReglasDeReserva.ValidarLimiteConsecutivo(
+                new[] { (Dia(12), Dia(14)), (Dia(8), Dia(10)), (Dia(10), Dia(12)) },
+                Dia(14),
+                Dia(15)));
+    }
+
+    [Fact]
+    public void Las_reservas_que_no_tocan_no_se_suman()
+    {
+        ReglasDeReserva.ValidarLimiteConsecutivo(
+            new[] { (Dia(8), Dia(10)), (Dia(14), Dia(16)) },
+            Dia(11),
+            Dia(12));
+    }
+
+    [Fact]
+    public void Una_reserva_que_solapa_tambien_se_conecta()
+    {
+        Assert.Throws<ReglaNegocioException>(
+            () => ReglasDeReserva.ValidarLimiteConsecutivo(
+                new[] { (Dia(8), Dia(12)) },
+                Dia(11),
+                Dia(14)));
     }
 }

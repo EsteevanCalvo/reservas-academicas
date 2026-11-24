@@ -54,9 +54,19 @@ public sealed class ServicioReservas
                 "El espacio ya tiene una reserva activa que se cruza con ese horario.");
         }
 
-        var reserva = new Reserva(espacio.Id, usuarioId, peticion.Inicio, peticion.Fin, ahora);
-
         DateOnly fecha = DateOnly.FromDateTime(peticion.Inicio);
+
+        // Límite de cuatro horas consecutivas: se suman las reservas activas
+        // del mismo usuario en el mismo espacio que tocan o solapan la nueva.
+        IReadOnlyList<Reserva> activasDelUsuario = await _reservas.ListarActivasDeUsuarioAsync(
+            usuarioId, espacio.Id, fecha, ct);
+
+        ReglasDeReserva.ValidarLimiteConsecutivo(
+            activasDelUsuario.Select(r => (r.Inicio, r.Fin)),
+            peticion.Inicio,
+            peticion.Fin);
+
+        var reserva = new Reserva(espacio.Id, usuarioId, peticion.Inicio, peticion.Fin, ahora);
 
         foreach (int indice in HorarioInstitucional.FranjasEntre(peticion.Inicio, peticion.Fin))
             reserva.AgregarFranja(espacio.Id, fecha, indice);

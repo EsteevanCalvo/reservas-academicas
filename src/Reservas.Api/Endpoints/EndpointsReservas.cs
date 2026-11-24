@@ -26,6 +26,10 @@ public static class EndpointsReservas
         })
         .RequireAuthorization(Politicas.Solicitante)
         .WithSummary("Crea una solicitud de reserva (Docente o Estudiante)")
+        .WithDescription(
+            "Valida el horario institucional (07:00 a 22:00, múltiplos de 30 minutos), " +
+            "el solapamiento con otras reservas y el límite de cuatro horas consecutivas " +
+            "por usuario y espacio, incluidas las reservas contiguas ya activas.")
         .Produces<ReservaResponse>(StatusCodes.Status201Created)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .ProducesProblem(StatusCodes.Status403Forbidden)

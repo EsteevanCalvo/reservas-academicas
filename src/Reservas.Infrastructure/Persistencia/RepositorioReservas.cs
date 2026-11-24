@@ -77,5 +77,24 @@ public sealed class RepositorioReservas : IRepositorioReservas
             .Select(f => f.Indice)
             .ToListAsync(ct);
 
+    public async Task<IReadOnlyList<Reserva>> ListarActivasDeUsuarioAsync(
+        int usuarioId,
+        int espacioId,
+        DateOnly fecha,
+        CancellationToken ct)
+    {
+        DateTime desde = fecha.ToDateTime(TimeOnly.MinValue);
+        DateTime hasta = desde.AddDays(1);
+
+        return await _db.Reservas
+            .AsNoTracking()
+            .Where(r => r.UsuarioId == usuarioId
+                && r.EspacioId == espacioId
+                && (r.Estado == EstadoReserva.Pendiente || r.Estado == EstadoReserva.Aprobada)
+                && r.Inicio >= desde
+                && r.Inicio < hasta)
+            .ToListAsync(ct);
+    }
+
     public void Agregar(Reserva reserva) => _db.Reservas.Add(reserva);
 }
