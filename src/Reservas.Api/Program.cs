@@ -31,6 +31,7 @@ builder.Services.AgregarInfraestructura(cadenaConexion);
 builder.Services.AddScoped<ServicioEspacios>();
 builder.Services.AddScoped<ServicioUsuarios>();
 builder.Services.AddScoped<ServicioAutenticacion>();
+builder.Services.AddScoped<ServicioReservas>();
 
 OpcionesJwt opcionesJwt = builder.Configuration
     .GetSection(OpcionesJwt.Seccion)
@@ -71,6 +72,9 @@ builder.Services.AddAuthorization(opciones =>
 
     opciones.AddPolicy(Politicas.Administrador, politica =>
         politica.RequireRole(nameof(Rol.Administrador)));
+
+    opciones.AddPolicy(Politicas.Solicitante, politica =>
+        politica.RequireRole(nameof(Rol.Docente), nameof(Rol.Estudiante)));
 });
 
 builder.Services.AddProblemDetails();
@@ -141,6 +145,8 @@ app.MapGet("/", () => Results.Redirect("/swagger"))
 EndpointsAutenticacion.Mapear(app);
 EndpointsEspacios.Mapear(app);
 EndpointsUsuarios.Mapear(app);
+EndpointsReservas.Mapear(app);
+EndpointsDisponibilidad.Mapear(app);
 
 app.Run();
 

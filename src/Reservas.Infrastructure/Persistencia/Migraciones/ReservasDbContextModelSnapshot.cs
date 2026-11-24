@@ -53,6 +53,90 @@ namespace Reservas.Infrastructure.Persistencia.Migraciones
                     b.ToTable("espacios", (string)null);
                 });
 
+            modelBuilder.Entity("Reservas.Core.Domain.FranjaReservada", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EspacioId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("Fecha")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Indice")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ReservaId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReservaId");
+
+                    b.HasIndex("EspacioId", "Fecha", "Indice")
+                        .IsUnique()
+                        .HasDatabaseName("IX_franjas_reservadas_unicas");
+
+                    b.ToTable("franjas_reservadas", (string)null);
+                });
+
+            modelBuilder.Entity("Reservas.Core.Domain.Reserva", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("CanceladaEn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CanceladaPorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreadaEn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DecididaEn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("DecididaPorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EspacioId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Fin")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Inicio")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MotivoCancelacion")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MotivoRechazo")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EspacioId", "Inicio");
+
+                    b.HasIndex("UsuarioId", "Inicio");
+
+                    b.ToTable("reservas", (string)null);
+                });
+
             modelBuilder.Entity("Reservas.Core.Domain.Usuario", b =>
                 {
                     b.Property<int>("Id")
@@ -92,6 +176,45 @@ namespace Reservas.Infrastructure.Persistencia.Migraciones
                         .IsUnique();
 
                     b.ToTable("usuarios", (string)null);
+                });
+
+            modelBuilder.Entity("Reservas.Core.Domain.FranjaReservada", b =>
+                {
+                    b.HasOne("Reservas.Core.Domain.Espacio", null)
+                        .WithMany()
+                        .HasForeignKey("EspacioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Reservas.Core.Domain.Reserva", null)
+                        .WithMany("Franjas")
+                        .HasForeignKey("ReservaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Reservas.Core.Domain.Reserva", b =>
+                {
+                    b.HasOne("Reservas.Core.Domain.Espacio", "Espacio")
+                        .WithMany()
+                        .HasForeignKey("EspacioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Reservas.Core.Domain.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Espacio");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Reservas.Core.Domain.Reserva", b =>
+                {
+                    b.Navigation("Franjas");
                 });
 #pragma warning restore 612, 618
         }

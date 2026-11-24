@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Reservas.Core.Abstractions;
 using Reservas.Infrastructure.Persistencia;
 using Reservas.Infrastructure.Seguridad;
+using Reservas.Infrastructure.Tiempo;
 
 namespace Reservas.Infrastructure;
 
@@ -16,10 +17,12 @@ public static class InyeccionDeDependencias
 
         servicios.AddScoped<IRepositorioEspacios, RepositorioEspacios>();
         servicios.AddScoped<IRepositorioUsuarios, RepositorioUsuarios>();
+        servicios.AddScoped<IRepositorioReservas, RepositorioReservas>();
         servicios.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajo>();
 
         servicios.AddSingleton<IHashContrasena, HashPbkdf2>();
         servicios.AddScoped<IEmisorTokens, EmisorTokens>();
+        servicios.AddSingleton<IProveedorFechaHora, RelojSistema>();
 
         return servicios;
     }
