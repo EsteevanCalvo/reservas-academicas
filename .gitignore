@@ -1,0 +1,19 @@
+# Compilación de .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# Base de datos local de SQLite
+*.db
+*.db-shm
+*.db-wal
+
+# Resultados de pruebas
+TestResults/
+*.trx
+
+# Configuración local del editor
+.vscode/
+.idea/
