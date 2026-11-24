@@ -1,0 +1,15 @@
+<Project>
+
+  <!--
+    Reglas comunes a todos los proyectos. El objetivo de TreatWarningsAsErrors es
+    que la afirmación "compila sin advertencias" sea verificable: si aparece una,
+    la compilación falla en lugar de quedar escondida en la salida.
+  -->
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+</Project>

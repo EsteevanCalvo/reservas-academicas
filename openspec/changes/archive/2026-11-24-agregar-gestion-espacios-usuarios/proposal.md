@@ -1,12 +1,12 @@
 # Propuesta: gestión de espacios académicos y usuarios
 
-## Por qué
+## Why
 
 El sistema de reservas no puede existir sin dos catálogos previos: qué se puede reservar y quién puede reservar. Hoy la institución no tiene ninguno de los dos de forma confiable. Los espacios viven en hojas de cálculo que se desincronizan y los usuarios se identifican por el remitente de un correo, sin roles ni permisos.
 
 Este incremento construye esa base y, además, establece la infraestructura transversal del proyecto: capas, persistencia, autenticación, autorización, manejo uniforme de errores y pruebas de integración. Todo lo que venga después se apoya en esta base, así que conviene cerrarla bien antes de agregar el flujo de reservas.
 
-## Qué cambia
+## What Changes
 
 - Se crea la solución con cuatro proyectos: `Reservas.Core`, `Reservas.Infrastructure`, `Reservas.Api` y `Reservas.Tests`.
 - Se implementa el catálogo de espacios académicos con tipo, capacidad, ubicación y estado activo.
@@ -17,18 +17,18 @@ Este incremento construye esa base y, además, establece la infraestructura tran
 - Se documenta la API en Swagger con esquema de seguridad para el token.
 - Se agregan pruebas unitarias de reglas y pruebas de integración contra la API real.
 
-## Capacidades
+## Capabilities
 
-### Capacidades nuevas
+### Capabilities nuevas
 
 - `espacios-academicos`: catálogo de laboratorios, auditorios y salas de cómputo, con consulta pública autenticada y administración restringida.
 - `usuarios-y-permisos`: registro y administración de usuarios, roles fijos, autenticación y autorización.
 
-### Capacidades modificadas
+### Capabilities modificadas
 
 Ninguna. Es el primer incremento del proyecto.
 
-## Impacto
+## Impact
 
 - **Código nuevo**: solución completa, entidades `Espacio` y `Usuario`, `ReservasDbContext`, migración inicial, servicios de espacios, usuarios y autenticación, endpoints y pruebas.
 - **Dependencias nuevas**: EF Core con proveedor SQLite, `Microsoft.AspNetCore.Authentication.JwtBearer`, Swashbuckle y el SDK de pruebas de ASP.NET Core. Todas quedan fijadas por versión.
