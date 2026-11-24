@@ -57,6 +57,7 @@ Construir un sistema que permita administrar espacios y usuarios, recibir solici
 
 | Entregable | Ubicación | Estado |
 |---|---|---|
+| Repositorio publicado | <https://github.com/EsteevanCalvo/reservas-academicas> | Público, rama `main` |
 | Plan de ingeniería | `PLAN_INGENIERIA.md` | Commit inicial `cad1c5a`, 414 líneas |
 | Especificaciones OpenSpec | `openspec/specs/` y `openspec/changes/archive/` | 5 capacidades, 18 requisitos, 102 escenarios, 3 cambios archivados |
 | Código funcional | `src/Reservas.Core`, `src/Reservas.Infrastructure`, `src/Reservas.Api` | Compila sin advertencias |

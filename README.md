@@ -4,6 +4,8 @@ API REST para gestionar la reserva de laboratorios, auditorios y salas de cómpu
 
 El proyecto se desarrolló con **desarrollo guiado por especificaciones (SDD)** usando [OpenSpec](https://github.com/Fission-AI/OpenSpec). El plan de ingeniería se escribió y se registró **antes** de las especificaciones, y cada especificación se registró **antes** de su implementación. El historial de Git conserva ese orden.
 
+**Repositorio:** <https://github.com/EsteevanCalvo/reservas-academicas>
+
 - [`PLAN_INGENIERIA.md`](PLAN_INGENIERIA.md): problemática, alcance, arquitectura, decisiones comparadas, riesgos y metodología.
 - [`INFORME_FINAL.md`](INFORME_FINAL.md): proceso, evidencia de la secuencia plan → specs → código, matriz de trazabilidad, resultados de las pruebas y análisis del cambio funcional.
 - [`openspec/`](openspec/): especificaciones vigentes y cambios archivados.
